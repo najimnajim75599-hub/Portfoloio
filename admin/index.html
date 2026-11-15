@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#070708">
+<title>Admin Console — Najimul Islam Ahmed</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23070708'/%3E%3Cpath d='M14 48V16h8l20 22V16h8v32h-8L22 26v22z' fill='%23e5091b'/%3E%3Ccircle cx='50' cy='48' r='4' fill='%233b82ff'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070708;--fg:#f4f2ee;--mute:rgba(244,242,238,.55);--red:#e5091b;--blue:#3b82ff;--green:#22c55e;--line:rgba(255,255,255,.1);--card:rgba(255,255,255,.04);color-scheme:dark}
+*{box-sizing:border-box;margin:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--fg);font-family:'Space Grotesk',system-ui,sans-serif;min-height:100vh;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+.bgfx{position:fixed;inset:0;z-index:-1;background:radial-gradient(60% 50% at 85% 0%,rgba(229,9,27,.25),transparent),radial-gradient(50% 50% at 0% 100%,rgba(59,130,255,.2),transparent)}
+.bgfx:after{content:"";position:absolute;inset:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:48px 48px;opacity:.22;-webkit-mask-image:radial-gradient(circle at 50% 25%,#000,transparent 75%);mask-image:radial-gradient(circle at 50% 25%,#000,transparent 75%)}
+.m{font:.7rem 'JetBrains Mono',monospace;letter-spacing:.08em;text-transform:uppercase}
+em{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-weight:400;color:var(--red)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);padding:20px;min-width:0}
+.b{border:1px solid var(--line);background:var(--card);color:inherit;border-radius:12px;padding:11px 18px;font:inherit;cursor:pointer;min-height:44px;transition:.2s;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.b:hover{border-color:var(--blue);transform:translateY(-1px)}
+.b.p{background:linear-gradient(90deg,var(--red),#ff3b4d);border:0;box-shadow:0 8px 24px rgba(229,9,27,.35)}
+.b.d{color:#ff6b78;border-color:rgba(229,9,27,.5)}.b.s{min-height:36px;padding:6px 12px;font-size:.85rem}
+/* login */
+#login{min-height:100vh;display:grid;place-items:center;padding:20px;position:relative;overflow:hidden}
+#rain{position:absolute;inset:0;width:100%;height:100%;opacity:.4}
+.lc{position:relative;z-index:2;width:min(420px,100%);padding:34px 30px;border-radius:24px;background:rgba(10,11,16,.78);border:1px solid var(--line);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);box-shadow:0 0 0 1px rgba(229,9,27,.25),0 30px 90px rgba(229,9,27,.25),0 0 120px rgba(59,130,255,.15)}
+.lc h1{font-size:2.1rem;letter-spacing:-.04em;margin:14px 0 4px}
+.logo{width:54px;height:54px;border-radius:15px;box-shadow:0 0 30px rgba(229,9,27,.5)}
+.shake{animation:sh .4s}@keyframes sh{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.f{display:grid;gap:6px;margin-bottom:14px}.f label{color:var(--blue)}
+input,textarea,select{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:12px;padding:13px 14px;color:var(--fg);font:inherit;font-size:16px;outline:0;transition:.2s}
+input:focus,textarea:focus,select:focus{border-color:var(--red);box-shadow:0 0 0 3px rgba(229,9,27,.2)}
+select option{background:#111}textarea{resize:vertical}
+.err{color:#ff6b78;min-height:1.2em;margin:4px 0 10px}
+.pw{position:relative}.pw button{position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:0;color:var(--mute);cursor:pointer;padding:10px}
+/* layout */
+#app{display:none;grid-template-columns:250px 1fr;min-height:100vh}
+aside{position:sticky;top:0;height:100vh;padding:22px 16px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:6px;background:rgba(7,7,8,.6);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+.brand{display:flex;align-items:center;gap:12px;margin-bottom:22px}.brand img{width:40px;height:40px;border-radius:11px}.brand b{display:block;letter-spacing:.05em}
+.nv{display:flex;gap:12px;align-items:center;padding:12px 14px;border-radius:12px;color:var(--mute);cursor:pointer;border:0;background:none;font:inherit;text-align:left;width:100%;position:relative;transition:.2s}
+.nv:hover{color:#fff;background:rgba(255,255,255,.05)}
+.nv.on{background:linear-gradient(90deg,rgba(229,9,27,.28),rgba(59,130,255,.12));color:#fff;box-shadow:inset 3px 0 var(--red)}
+.ic{font-size:1.15rem;width:22px;text-align:center}
+.bdg{background:var(--red);color:#fff;border-radius:99px;font:700 .65rem 'JetBrains Mono';padding:2px 7px;margin-left:auto;font-style:normal;display:none}
+.side-foot{margin-top:auto;display:grid;gap:8px}
+main{padding:28px;min-width:0}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:24px}
+.top h1{font-size:clamp(1.7rem,4vw,2.6rem);letter-spacing:-.04em}.top .m{color:var(--blue)}
+.tr{display:flex;gap:10px;align-items:center}
+.av{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--red),var(--blue));display:grid;place-items:center;font-weight:700;overflow:hidden}.av img{width:100%;height:100%;object-fit:cover}
+.g4{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;margin-bottom:16px}
+.g2{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:16px}.g2e{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.st .v{font-size:2.6rem;font-weight:700;letter-spacing:-.05em;line-height:1.1;margin:8px 0 2px}.st .s{color:var(--mute);font-size:.85rem}
+.st{position:relative;overflow:hidden;transition:.3s}.st:hover{transform:translateY(-4px);border-color:rgba(229,9,27,.5)}
+.spark{position:absolute;right:0;bottom:0;width:55%;height:50px;opacity:.9}
+.card h3{font-size:1.05rem;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center}
+.chart{width:100%;height:auto;display:block}.ln{stroke-dasharray:1;stroke-dashoffset:1;animation:dr 1.6s ease forwards}@keyframes dr{to{stroke-dashoffset:0}}
+.bar{transform-box:fill-box;transform-origin:bottom;animation:gr .9s cubic-bezier(.2,.9,.3,1.2) both}@keyframes gr{from{transform:scaleY(0)}}
+.dn{display:flex;gap:18px;align-items:center;flex-wrap:wrap}.dn svg{width:130px;height:130px;flex:none}.dn circle.sg{transition:stroke-dasharray 1s}
+.lg{display:grid;gap:8px;font-size:.9rem}.lg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:8px}
+.feed .it{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);cursor:pointer}.feed .it:last-child{border:0}
+.ava{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--red));display:grid;place-items:center;font-weight:700;flex:none}
+.mute{color:var(--mute)}.dot{width:8px;height:8px;border-radius:50%;background:var(--red);display:inline-block;margin-right:6px;box-shadow:0 0 8px var(--red)}
+.live{display:inline-flex;gap:8px;align-items:center;color:var(--green)}.live:before{content:"";width:8px;height:8px;border-radius:50%;background:var(--green);animation:pl 1.4s infinite}@keyframes pl{50%{opacity:.3;box-shadow:0 0 12px var(--green)}}
+.qa{display:grid;gap:10px}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px}
+.pc{position:relative;overflow:hidden;transition:.3s;display:flex;flex-direction:column;gap:10px}.pc:hover{transform:translateY(-5px);border-color:rgba(59,130,255,.6)}
+.pc:before{content:"";position:absolute;inset:0 0 auto;height:3px;background:linear-gradient(90deg,var(--red),var(--blue))}
+.pc h4{font-size:1.4rem;letter-spacing:-.03em}.pc p{color:var(--mute);flex:1}
+.tag{display:inline-block;padding:3px 10px;border-radius:99px;font-size:.75rem;background:rgba(255,255,255,.07);margin:0 6px 6px 0}
+.sb{padding:4px 12px;border-radius:99px;font:700 .65rem 'JetBrains Mono';letter-spacing:.06em;text-transform:uppercase;border:1px solid;align-self:flex-start}
+.s-dev{color:var(--blue);border-color:var(--blue)}.s-soon{color:#ff6b78;border-color:var(--red)}.s-live{color:var(--green);border-color:var(--green)}.s-hold{color:var(--mute);border-color:var(--mute)}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.pf{display:grid;grid-template-columns:1.3fr 1fr;gap:16px}
+.drop{border:2px dashed var(--line);border-radius:16px;padding:20px;text-align:center;cursor:pointer;transition:.2s;margin-bottom:16px}.drop:hover,.drop.on{border-color:var(--red);background:rgba(229,9,27,.06)}
+.pv{text-align:center;position:sticky;top:20px}.pv .big{width:130px;height:130px;margin:6px auto 14px;border-radius:50%;padding:4px;background:conic-gradient(from 0deg,var(--red),var(--blue),var(--red));animation:sp 8s linear infinite}
+.pv .big div{width:100%;height:100%;border-radius:50%;overflow:hidden;background:#111;display:grid;place-items:center;font-size:2.4rem;font-weight:700;animation:sp 8s linear infinite reverse}.pv img{width:100%;height:100%;object-fit:cover}
+@keyframes sp{to{transform:rotate(360deg)}}
+.pv h4{font-size:1.5rem;letter-spacing:-.03em}
+.mg{display:grid;grid-template-columns:340px 1fr;gap:16px;min-height:60vh}
+.ml{max-height:70vh;overflow:auto}.mi{padding:14px;border-radius:12px;cursor:pointer;display:flex;gap:12px;border:1px solid transparent}.mi:hover{background:rgba(255,255,255,.04)}.mi.on{background:rgba(229,9,27,.1);border-color:rgba(229,9,27,.4)}
+.mi .t{flex:1;min-width:0}.mi b,.mi small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.body{white-space:pre-wrap;line-height:1.7;margin:18px 0;padding:18px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid var(--line)}
+.meter{height:6px;border-radius:9px;background:rgba(255,255,255,.1);overflow:hidden;margin:6px 0 4px}.meter i{display:block;height:100%;width:0;transition:.3s}
+.empty{text-align:center;padding:40px 10px;color:var(--mute)}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.78);display:none;place-items:center;z-index:100;padding:16px;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}.ov.on{display:grid}
+.sheet{width:min(560px,100%);max-height:92vh;overflow:auto;background:#0b0d12;border:1px solid rgba(229,9,27,.5);border-radius:20px;padding:24px;box-shadow:0 0 80px rgba(229,9,27,.25);animation:up .3s}@keyframes up{from{transform:translateY(30px);opacity:0}}
+#toasts{position:fixed;right:16px;top:calc(16px + env(safe-area-inset-top,0px));z-index:300;display:grid;gap:8px}
+.t{background:#0b0d12;border:1px solid var(--blue);border-radius:12px;padding:12px 18px;box-shadow:0 10px 40px rgba(0,0,0,.6);animation:up .3s}.t.e{border-color:var(--red)}.t.o{border-color:var(--green)}
+.sk{background:linear-gradient(90deg,rgba(255,255,255,.04),rgba(255,255,255,.1),rgba(255,255,255,.04));background-size:200%;animation:shm 1.2s infinite;border-radius:14px;height:120px}@keyframes shm{to{background-position:-200%}}
+.fade{animation:fd .5s both}@keyframes fd{from{opacity:0;transform:translateY(14px)}}
+@media(max-width:900px){.g2,.g2e,.pf,.mg{grid-template-columns:1fr}.pv{position:static}}
+@media(max-width:820px){#app{grid-template-columns:1fr}
+ aside{position:fixed;inset:auto 0 0 0;height:auto;flex-direction:row;z-index:50;padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px));border-right:0;border-top:1px solid var(--line);justify-content:space-around;background:rgba(7,7,8,.92)}
+ .nv{flex-direction:column;gap:2px;font-size:.64rem;padding:8px 2px;text-align:center;justify-content:center;flex:1}.brand,.side-foot{display:none}.bdg{position:absolute;top:2px;right:14%;margin:0}
+ main{padding:16px 14px 100px}}
+@media(prefers-reduced-motion:reduce){*,:before,:after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="bgfx"></div><div id="toasts"></div>
+<div id="login"><canvas id="rain" aria-hidden="true"></canvas>
+  <form class="lc" id="lf" autocomplete="on">
+    <img class="logo" alt="" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23070708'/%3E%3Cpath d='M14 48V16h8l20 22V16h8v32h-8L22 26v22z' fill='%23e5091b'/%3E%3Ccircle cx='50' cy='48' r='4' fill='%233b82ff'/%3E%3C/svg%3E">
+    <p class="m" style="color:var(--blue);margin-top:16px">&gt; admin console</p>
+    <h1>Welcome <em>back</em></h1><p class="mute" style="margin-bottom:22px">Sign in to manage your portfolio.</p>
+    <div class="f"><label class="m" for="le">Email</label><input id="le" type="email" autocomplete="username" required></div>
+    <div class="f"><label class="m" for="lp">Password</label><div class="pw"><input id="lp" type="password" autocomplete="current-password" required><button type="button" id="eye" aria-label="Show password">👁</button></div></div>
+    <p class="err m" id="le-err"></p>
+    <button class="b p" style="width:100%" id="lb">Sign in →</button>
+    <p class="m mute" style="text-align:center;margin-top:18px"><a href="../">← back to website</a> · secured by supabase rls</p>
+  </form>
+</div>
+<div id="app"></div>
+<div class="ov" id="ov"><div class="sheet" id="sheet"></div></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script>
+window.CONFIG={url:'https://rorvqxlkncecxjntywvn.supabase.co',key:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJvcnZxeGxrbmNlY3hqbnR5d3ZuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ2OTM0MzIsImV4cCI6MjExMDI2OTQzMn0.xnG9NshsT_NN_PMJxVuCpSS6tR7mGR7GSoL-Z9ip6-8'};
+(()=>{
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ADMIN='najimnajim75598@gmail.com'; // UI hint only. Real protection = Row Level Security (pf_is_admin)
+let sb;try{sb=supabase.createClient(CONFIG.url,CONFIG.key)}catch(e){}
+const DEF={name:'Najimul Islam Ahmed',tagline:'Creative developer building AI, motion & systems that feel alive.',intro:'I design and build immersive digital experiences where code, motion and AI meet.',email:'your@email.com',gh:'https://github.com/',ig:'https://instagram.com/najimul__xmx',li:'https://linkedin.com/'};
+const S={cfg:{},projects:[],messages:[],visits:[],tab:'overview',sel:null,q:'',user:null};
+const COL=['#e5091b','#3b82ff','#f4f2ee','#22c55e','#a855f7'];
+const toast=(t,k='')=>{const e=document.createElement('div');e.className='t '+k;e.textContent=t;$('#toasts').appendChild(e);setTimeout(()=>e.remove(),3200)};
+const ago=d=>{const s=(Date.now()-new Date(d))/1000;return s<60?'just now':s<3600?Math.floor(s/60)+'m ago':s<86400?Math.floor(s/3600)+'h ago':Math.floor(s/86400)+'d ago'};
+const seen=()=>{try{return JSON.parse(localStorage.getItem('pf_seen')||'[]')}catch(e){return[]}};
+const markSeen=id=>{try{const a=seen();if(!a.includes(id)){a.push(id);localStorage.setItem('pf_seen',JSON.stringify(a))}}catch(e){}};
+const unread=()=>S.messages.filter(m=>!seen().includes(m.id)).length;
+const first=()=>((S.cfg.name||DEF.name).split(' ')[0]);
+const ini=n=>(n||'').split(/\s+/).map(x=>x[0]).slice(0,2).join('').toUpperCase();
+/* ---------- charts ---------- */
+const dayKeys=n=>Array.from({length:n},(_,i)=>{const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-(n-1-i));return d});
+const kd=d=>d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate();
+const series=(rows,n)=>{const ds=dayKeys(n),m={};rows.forEach(r=>{const k=kd(new Date(r.created_at));m[k]=(m[k]||0)+1});return{labels:ds.map(d=>d.toLocaleDateString(undefined,{day:'numeric',month:'short'})),vals:ds.map(d=>m[kd(d)]||0)}};
+const sum=a=>a.reduce((x,y)=>x+y,0);
+function area(v,lb,c,id){const W=600,H=210,P=26,mx=Math.max(...v,1),n=v.length,x=i=>P+i*(W-2*P)/(n-1||1),y=a=>H-P-(a/mx)*(H-2*P-12);const pt=v.map((a,i)=>[x(i),y(a)]);const ln='M'+pt.map(p=>p.join(',')).join('L');
+return `<svg class="chart" viewBox="0 0 ${W} ${H}"><defs><linearGradient id="g${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c}" stop-opacity=".45"/><stop offset="1" stop-color="${c}" stop-opacity="0"/></linearGradient></defs>${[0,1,2,3].map(i=>`<line x1="${P}" x2="${W-P}" y1="${P+i*(H-2*P)/3}" y2="${P+i*(H-2*P)/3}" stroke="rgba(255,255,255,.07)"/>`).join('')}<path d="${ln}L${x(n-1)},${H-P}L${x(0)},${H-P}Z" fill="url(#g${id})"/><path class="ln" pathLength="1" d="${ln}" fill="none" stroke="${c}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>${pt.map((p,i)=>`<circle cx="${p[0]}" cy="${p[1]}" r="4.5" fill="#070708" stroke="${c}" stroke-width="2"><title>${lb[i]}: ${v[i]}</title></circle>`).join('')}<text x="${P}" y="${H-6}" fill="#888" font-size="11">${lb[0]}</text><text x="${W-P}" y="${H-6}" fill="#888" font-size="11" text-anchor="end">${lb[n-1]}</text><text x="${P}" y="14" fill="#888" font-size="11">max ${mx}</text></svg>`}
+function bars(v,lb,c){const W=600,H=170,P=22,mx=Math.max(...v,1),n=v.length,w=(W-2*P)/n;return `<svg class="chart" viewBox="0 0 ${W} ${H}">${v.map((a,i)=>{const h=Math.max(a/mx*(H-2*P-10),a?6:2);return `<rect class="bar" style="animation-delay:${i*40}ms" x="${P+i*w+4}" y="${H-P-h}" width="${w-8}" height="${h}" rx="5" fill="${c}" opacity="${a?1:.25}"><title>${lb[i]}: ${a}</title></rect>`}).join('')}<text x="${P}" y="${H-5}" fill="#888" font-size="11">${lb[0]}</text><text x="${W-P}" y="${H-5}" fill="#888" font-size="11" text-anchor="end">${lb[n-1]}</text></svg>`}
+function donut(parts,ctr,sub){const t=sum(parts.map(p=>p.v))||1,R=40,C=2*Math.PI*R;let o=0;return `<div class="dn"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="${R}" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="12"/>${parts.map(p=>{const l=p.v/t*C,s=`<circle class="sg" cx="50" cy="50" r="${R}" fill="none" stroke="${p.c}" stroke-width="12" stroke-dasharray="${l} ${C-l}" stroke-dashoffset="${-o}" transform="rotate(-90 50 50)"/>`;o+=l;return p.v?s:''}).join('')}<text x="50" y="52" text-anchor="middle" fill="#fff" font-size="17" font-weight="700">${ctr}</text><text x="50" y="65" text-anchor="middle" fill="#888" font-size="7">${sub||''}</text></svg><div class="lg">${parts.map(p=>`<span><i style="background:${p.c}"></i>${esc(p.l)} · <b>${p.v}</b></span>`).join('')||'<span class="mute">No data yet</span>'}</div></div>`}
+function spark(v,c){const W=100,H=40,mx=Math.max(...v,1),n=v.length;const p=v.map((a,i)=>(i*W/(n-1||1))+','+(H-3-(a/mx)*(H-8))).join('L');return `<svg class="spark" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none"><path d="M${p}" fill="none" stroke="${c}" stroke-width="2" vector-effect="non-scaling-stroke"/></svg>`}
+function countUp(){$$('[data-count]').forEach(el=>{const to=+el.dataset.count,t0=performance.now();(function f(t){const k=Math.min((t-t0)/900,1);el.textContent=Math.round(to*(1-Math.pow(1-k,3)));if(k<1)requestAnimationFrame(f)})(t0)})}
+/* ---------- data ---------- */
+async function loadAll(){const since=new Date(Date.now()-30*864e5).toISOString();
+const[c,p,m,v]=await Promise.all([sb.from('pf_site_config').select('data').eq('id',1).maybeSingle(),sb.from('pf_projects').select('*').order('sort'),sb.from('pf_messages').select('*').order('created_at',{ascending:false}),sb.from('pf_visits').select('created_at,device').gte('created_at',since).order('created_at',{ascending:false}).limit(5000)]);
+S.cfg=(c.data&&c.data.data)||{};S.projects=p.data||[];S.messages=m.data||[];S.visits=v.data||[]}
+/* ---------- login ---------- */
+(function rain(){const c=$('#rain'),x=c.getContext('2d');let W,H,d;const R=()=>{W=c.width=innerWidth;H=c.height=innerHeight;d=Array(Math.floor(W/18)).fill(0).map(()=>Math.random()*H/18)};R();addEventListener('resize',R);
+setInterval(()=>{if($('#login').style.display==='none')return;x.fillStyle='rgba(7,7,8,.12)';x.fillRect(0,0,W,H);x.font='14px JetBrains Mono,monospace';d.forEach((y,i)=>{x.fillStyle=i%4?'#e5091b':'#3b82ff';x.fillText('01{}<>/;'[Math.floor(Math.random()*8)],i*18,y*18);d[i]=y*18>H&&Math.random()>.96?0:y+1})},60)})();
+$('#le').value=ADMIN;
+$('#eye').onclick=()=>{const p=$('#lp');p.type=p.type==='password'?'text':'password'};
+$('#lf').onsubmit=async e=>{e.preventDefault();const b=$('#lb'),er=$('#le-err');er.textContent='';b.textContent='Signing in…';b.disabled=true;
+if(!sb){er.textContent='Could not load Supabase. Check internet.';b.disabled=false;b.textContent='Sign in →';return}
+const{error}=await sb.auth.signInWithPassword({email:$('#le').value.trim(),password:$('#lp').value});b.disabled=false;b.textContent='Sign in →';
+if(error){er.textContent=error.message;const c=$('.lc');c.classList.remove('shake');void c.offsetWidth;c.classList.add('shake');return}boot()};
+async function boot(){if(!sb)return;const{data:{session}}=await sb.auth.getSession();if(!session)return;const u=session.user;
+if((u.email||'').toLowerCase()!==ADMIN||!u.email_confirmed_at){await sb.auth.signOut();$('#le-err').textContent='That account is not authorized.';return}
+S.user=u;$('#login').style.display='none';$('#app').style.display='grid';$('#app').innerHTML='<main style="grid-column:1/-1"><div class="g4"><div class="sk"></div><div class="sk"></div><div class="sk"></div><div class="sk"></div></div></main>';
+await loadAll();shell();go(S.tab)}
+/* ---------- shell ---------- */
+const TABS=[['overview','◈','Overview'],['profile','◉','Profile'],['projects','▦','Projects'],['messages','✉','Messages'],['security','⚙','Security']];
+function shell(){const logo=$('.logo').src;
+$('#app').innerHTML=`<aside><div class="brand"><img src="${logo}" alt=""><div><b>NIA</b><span class="m mute">admin console</span></div></div>${TABS.map(([k,i,l])=>`<button class="nv" data-t="${k}"><span class="ic">${i}</span><span>${l}</span>${k==='messages'?'<i class="bdg" id="bm"></i>':''}</button>`).join('')}<div class="side-foot"><a class="b" href="../">↗ View website</a><button class="b d" id="so">Sign out</button></div></aside><main><header class="top"><div><p class="m" id="crumb"></p><h1 id="ttl"></h1></div><div class="tr"><button class="b" id="rf" title="Refresh">⟳</button><span class="av" id="avt"></span></div></header><section id="view"></section></main>`;
+$$('.nv').forEach(b=>b.onclick=()=>go(b.dataset.t));
+$('#so').onclick=async()=>{await sb.auth.signOut();location.reload()};
+$('#rf').onclick=async()=>{await loadAll();go(S.tab);toast('Refreshed','o')}}
+function paintHead(){const a=$('#avt');a.innerHTML=S.cfg.photo?`<img alt="" src="${esc(S.cfg.photo)}">`:esc(ini(S.cfg.name||DEF.name));const n=unread(),b=$('#bm');if(b){b.textContent=n;b.style.display=n?'inline-block':'none'}}
+function go(t){S.tab=t;$$('.nv').forEach(b=>b.classList.toggle('on',b.dataset.t===t));const T=TABS.find(x=>x[0]===t);$('#crumb').textContent='/ '+T[2].toLowerCase();$('#ttl').innerHTML=t==='overview'?`${greet()}, <em>${esc(first())}</em>`:T[2];paintHead();V[t]();$('#view').classList.remove('fade');void $('#view').offsetWidth;$('#view').classList.add('fade');scrollTo(0,0)}
+const greet=()=>{const h=new Date().getHours();return h<5?'Late night':h<12?'Good morning':h<17?'Good afternoon':'Good evening'};
+/* ---------- views ---------- */
+const V={};
+V.overview=()=>{const vs=series(S.visits,14),ms=series(S.messages,14),dev={mobile:0,desktop:0,tablet:0};S.visits.forEach(v=>dev[v.device]=(dev[v.device]||0)+1);
+const st={};S.projects.forEach(p=>{const k=p.status||'Unset';st[k]=(st[k]||0)+1});const c={...DEF,...S.cfg};
+const fl=[c.name!==DEF.name||c.name,c.tagline&&c.tagline!==DEF.tagline,c.intro&&c.intro!==DEF.intro,c.email&&c.email!==DEF.email,c.gh&&c.gh!==DEF.gh,c.ig,c.li&&c.li!==DEF.li,c.photo];const done=fl.filter(Boolean).length,pc=Math.round(done/8*100);
+const dv=sum(vs.vals),m7=sum(ms.vals.slice(-7));
+$('#view').innerHTML=`<div class="g4">
+<div class="card st"><span class="m mute">Visitors · 14d</span><div class="v" data-count="${dv}">0</div><div class="s">${S.visits.length} in 30 days</div>${spark(vs.vals,'#3b82ff')}</div>
+<div class="card st"><span class="m mute">Messages</span><div class="v" data-count="${S.messages.length}">0</div><div class="s">${m7} this week · ${unread()} unread</div>${spark(ms.vals,'#e5091b')}</div>
+<div class="card st"><span class="m mute">Projects</span><div class="v" data-count="${S.projects.length}">0</div><div class="s">${Object.entries(st).map(([k,v])=>v+' '+k).join(' · ')||'none yet'}</div></div>
+<div class="card st"><span class="m mute">Profile complete</span><div class="v"><span data-count="${pc}">0</span>%</div><div class="s"><span class="live">site online</span></div></div></div>
+<div class="g2"><div class="card"><h3>Visitors <span class="m mute">last 14 days</span></h3>${area(vs.vals,vs.labels,'#3b82ff','v')}</div><div class="card"><h3>Devices</h3>${donut([{l:'Mobile',v:dev.mobile,c:COL[0]},{l:'Desktop',v:dev.desktop,c:COL[1]},{l:'Tablet',v:dev.tablet||0,c:COL[2]}],S.visits.length,'visits')}</div></div>
+<div class="g2e"><div class="card"><h3>Messages <span class="m mute">last 14 days</span></h3>${bars(ms.vals,ms.labels,'#e5091b')}</div><div class="card"><h3>Project status</h3>${donut(Object.entries(st).map(([k,v],i)=>({l:k,v,c:COL[i%5]})),S.projects.length,'projects')}</div></div>
+<div class="g2e"><div class="card feed"><h3>Recent messages <button class="b s" data-go="messages">View all</button></h3>${S.messages.slice(0,4).map(m=>`<div class="it" data-m="${m.id}"><span class="ava">${esc(ini(m.name))}</span><div style="min-width:0"><b>${esc(m.name)}</b> <span class="mute m">${ago(m.created_at)}</span><div class="mute" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(m.message)}</div></div></div>`).join('')||'<div class="empty">No messages yet.</div>'}</div>
+<div class="card"><h3>Quick actions</h3><div class="qa"><button class="b p" data-go="projects">▦ Add or edit projects</button><button class="b" data-go="profile">◉ Update profile & photo</button><a class="b" href="../" target="_blank" rel="noreferrer">↗ Open live website</a><button class="b" data-go="security">⚙ Change password</button></div></div></div>`;
+$$('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));$$('[data-m]').forEach(b=>b.onclick=()=>{S.sel=b.dataset.m;go('messages')});countUp()};
+const FD=[['name','Name','text'],['tagline','Tagline','text'],['intro','About intro','text'],['email','Contact email','email'],['gh','GitHub URL','url'],['ig','Instagram URL','url'],['li','LinkedIn URL','url']];
+const shrink=f=>new Promise(r=>{const i=new Image();i.onload=()=>{const k=Math.min(1,900/Math.max(i.width,i.height)),c=document.createElement('canvas');c.width=i.width*k;c.height=i.height*k;c.getContext('2d').drawImage(i,0,0,c.width,c.height);c.toBlob(b=>r(b||f),'image/jpeg',.86)};i.onerror=()=>r(f);i.src=URL.createObjectURL(f)});
+V.profile=()=>{const c={...DEF,...S.cfg};let file=null;
+$('#view').innerHTML=`<div class="pf"><div class="card"><div class="drop" id="dz"><div style="font-size:1.8rem">⬆</div><b>Profile photo</b><p class="mute">Tap or drop an image here (auto-resized)</p><input type="file" id="ph" accept="image/*" hidden></div>${FD.map(([k,l,t])=>`<div class="f"><label class="m">${l}</label>${k==='intro'?`<textarea id="f-${k}" rows="3">${esc(c[k])}</textarea>`:`<input type="${t}" id="f-${k}" value="${esc(c[k])}">`}</div>`).join('')}<button class="b p" id="sv">Save profile</button></div>
+<div class="card pv"><span class="m mute">live preview</span><div class="big"><div id="pi">${c.photo?`<img alt="" src="${esc(c.photo)}">`:esc(ini(c.name))}</div></div><h4 id="pn">${esc(c.name)}</h4><p class="mute" id="pt">${esc(c.tagline)}</p><p class="m" style="margin-top:14px;color:var(--blue)" id="pe">${esc(c.email)}</p></div></div>`;
+const live=()=>{$('#pn').textContent=$('#f-name').value;$('#pt').textContent=$('#f-tagline').value;$('#pe').textContent=$('#f-email').value;if(!file&&!c.photo)$('#pi').textContent=ini($('#f-name').value)};$$('[id^=f-]').forEach(i=>i.oninput=live);
+const pick=f=>{if(!f||!f.type.startsWith('image/'))return;file=f;$('#pi').innerHTML=`<img alt="" src="${URL.createObjectURL(f)}">`};
+$('#dz').onclick=()=>$('#ph').click();$('#ph').onchange=e=>pick(e.target.files[0]);
+['dragover','dragenter'].forEach(ev=>$('#dz').addEventListener(ev,e=>{e.preventDefault();$('#dz').classList.add('on')}));['dragleave','drop'].forEach(ev=>$('#dz').addEventListener(ev,e=>{e.preventDefault();$('#dz').classList.remove('on')}));$('#dz').addEventListener('drop',e=>pick(e.dataTransfer.files[0]));
+$('#sv').onclick=async()=>{const b=$('#sv');b.disabled=true;b.textContent='Saving…';const n={};FD.forEach(([k])=>n[k]=$('#f-'+k).value.trim());n.photo=S.cfg.photo||'';
+try{if(file){const blob=await shrink(file),path='profile-'+Date.now()+'.jpg',up=await sb.storage.from('pf-avatars').upload(path,blob,{contentType:'image/jpeg'});if(up.error)throw up.error;n.photo=sb.storage.from('pf-avatars').getPublicUrl(path).data.publicUrl}
+const{error}=await sb.from('pf_site_config').upsert({id:1,data:n,updated_at:new Date().toISOString()});if(error)throw error;S.cfg=n;paintHead();toast('Profile saved — live on your site','o')}catch(e){toast(e.message||'Save failed','e')}b.disabled=false;b.textContent='Save profile'}};
+const SC=s=>({'In Development':'dev','Coming Soon':'soon','Live':'live','On Hold':'hold'}[s]||'hold');
+V.projects=()=>{$('#view').innerHTML=`<div class="row" style="justify-content:space-between;margin-bottom:16px"><p class="mute">${S.projects.length} project${S.projects.length==1?'':'s'} — drag order with ↑ ↓</p><button class="b p" id="add">+ Add project</button></div><div class="pgrid">${S.projects.map((p,i)=>`<div class="card pc"><span class="sb s-${SC(p.status)}">${esc(p.status||'Unset')}</span><h4>${esc(p.title)}</h4><p>${esc(p.description||'No description yet.')}</p><div>${(p.tech||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</div><div class="row"><button class="b s" data-e="${p.id}">✎ Edit</button><button class="b s" data-u="${i}" ${i?'':'disabled'}>↑</button><button class="b s" data-d="${i}" ${i<S.projects.length-1?'':'disabled'}>↓</button><button class="b s d" data-x="${p.id}">🗑</button></div></div>`).join('')||'<div class="empty card">No projects yet — add your first one.</div>'}</div>`;
+$('#add').onclick=async()=>{const{data,error}=await sb.from('pf_projects').insert({title:'New project',status:'In Development',description:'',sort:S.projects.length}).select().single();if(error)return toast(error.message,'e');S.projects.push(data);V.projects();edit(data.id)};
+$$('[data-e]').forEach(b=>b.onclick=()=>edit(b.dataset.e));
+$$('[data-x]').forEach(b=>b.onclick=async()=>{if(!confirm('Delete this project?'))return;const{error}=await sb.from('pf_projects').delete().eq('id',b.dataset.x);if(error)return toast(error.message,'e');S.projects=S.projects.filter(p=>p.id!=b.dataset.x);toast('Deleted','o');V.projects()});
+const mv=async(i,j)=>{const a=S.projects[i],b=S.projects[j];const r=await Promise.all([sb.from('pf_projects').update({sort:j}).eq('id',a.id),sb.from('pf_projects').update({sort:i}).eq('id',b.id)]);if(r.some(x=>x.error))return toast('Reorder failed','e');S.projects[i]=b;S.projects[j]=a;V.projects()};
+$$('[data-u]').forEach(b=>b.onclick=()=>mv(+b.dataset.u,+b.dataset.u-1));$$('[data-d]').forEach(b=>b.onclick=()=>mv(+b.dataset.d,+b.dataset.d+1))};
+function edit(id){const p=S.projects.find(x=>x.id==id);if(!p)return;const f=(k,l,v,t='text')=>`<div class="f"><label class="m">${l}</label><input id="e-${k}" type="${t}" value="${esc(v)}"></div>`;
+$('#sheet').innerHTML=`<h3 style="font-size:1.4rem;margin-bottom:14px">Edit project</h3>${f('title','Title',p.title)}<div class="f"><label class="m">Status</label><select id="e-status">${['In Development','Coming Soon','Live','On Hold'].map(s=>`<option ${s===p.status?'selected':''}>${s}</option>`).join('')}</select></div><div class="f"><label class="m">Description</label><textarea id="e-desc" rows="3">${esc(p.description)}</textarea></div>${f('tech','Tech (comma separated)',(p.tech||[]).join(', '))}${f('demo','Live demo URL',p.demo_url||'','url')}${f('gh','GitHub URL',p.github_url||'','url')}<div class="row" style="margin-top:8px"><button class="b p" id="es">Save</button><button class="b" id="ec">Cancel</button></div>`;$('#ov').classList.add('on');
+$('#ec').onclick=()=>$('#ov').classList.remove('on');
+$('#es').onclick=async()=>{const v=k=>$('#e-'+k).value.trim(),row={title:v('title')||'Untitled',status:$('#e-status').value,description:v('desc'),tech:v('tech').split(',').map(x=>x.trim()).filter(Boolean),demo_url:v('demo')||null,github_url:v('gh')||null};
+const{error}=await sb.from('pf_projects').update(row).eq('id',id);if(error)return toast(error.message,'e');Object.assign(p,row);$('#ov').classList.remove('on');toast('Project saved — live on your site','o');V.projects()}}
+$('#ov').onclick=e=>{if(e.target.id==='ov')$('#ov').classList.remove('on')};
+V.messages=()=>{const q=S.q.toLowerCase(),L=S.messages.filter(m=>(m.name+m.email+m.message).toLowerCase().includes(q));if(!S.sel&&L[0])S.sel=L[0].id;const m=S.messages.find(x=>x.id==S.sel);if(m)markSeen(m.id);paintHead();
+$('#view').innerHTML=`<div class="mg"><div class="card ml"><input id="q" placeholder="Search messages…" value="${esc(S.q)}" style="margin-bottom:10px">${L.map(x=>`<div class="mi ${x.id==S.sel?'on':''}" data-i="${x.id}"><span class="ava">${esc(ini(x.name))}</span><div class="t"><b>${seen().includes(x.id)?'':'<span class="dot"></span>'}${esc(x.name)}</b><small class="mute">${esc(x.message)}</small></div><span class="m mute">${ago(x.created_at)}</span></div>`).join('')||'<div class="empty">No messages found.</div>'}</div>
+<div class="card">${m?`<div class="row" style="justify-content:space-between;align-items:center"><div><h3 style="margin:0;font-size:1.5rem">${esc(m.name)}</h3><span class="mute">${esc(m.email)} · ${new Date(m.created_at).toLocaleString()}</span></div></div><div class="body">${esc(m.message)}</div><div class="row"><a class="b p" href="mailto:${esc(m.email)}?subject=${encodeURIComponent('Re: your message')}">↩ Reply by email</a><button class="b" id="cp">⧉ Copy email</button><button class="b d" id="dl">🗑 Delete</button></div>`:'<div class="empty">Select a message to read it.<br><br>✉</div>'}</div></div>`;
+$('#q').oninput=e=>{S.q=e.target.value;const p=e.target.selectionStart;V.messages();const n=$('#q');n.focus();n.setSelectionRange(p,p)};$$('[data-i]').forEach(b=>b.onclick=()=>{S.sel=b.dataset.i;V.messages()});
+if(m){$('#cp').onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText(m.email);toast('Email copied','o')};$('#dl').onclick=async()=>{if(!confirm('Delete this message?'))return;const{error}=await sb.from('pf_messages').delete().eq('id',m.id);if(error)return toast(error.message,'e');S.messages=S.messages.filter(x=>x.id!=m.id);S.sel=null;toast('Deleted','o');V.messages()}}};
+V.security=()=>{const u=S.user;$('#view').innerHTML=`<div class="g2e"><div class="card"><h3>Account</h3><p><span class="live">verified admin</span></p><p style="margin:14px 0 4px;font-size:1.2rem">${esc(u.email)}</p><p class="mute">Last sign-in: ${u.last_sign_in_at?new Date(u.last_sign_in_at).toLocaleString():'—'}</p><p class="mute" style="margin-top:10px">Access is enforced by database rules (Row Level Security) — only this verified email can change your data.</p><button class="b d" id="so2" style="margin-top:18px">Sign out</button></div>
+<div class="card"><h3>Change password</h3><div class="f"><label class="m">New password</label><div class="pw"><input type="password" id="np" autocomplete="new-password"></div><div class="meter"><i id="mt"></i></div><small class="mute" id="mh">Use 10+ characters with numbers & symbols.</small></div><div class="f"><label class="m">Confirm password</label><input type="password" id="np2" autocomplete="new-password"></div><button class="b p" id="cp2">Update password</button></div></div>`;
+$('#so2').onclick=async()=>{await sb.auth.signOut();location.reload()};
+$('#np').oninput=e=>{const p=e.target.value;let s=0;if(p.length>=8)s++;if(p.length>=12)s++;if(/[A-Z]/.test(p)&&/[a-z]/.test(p))s++;if(/\d/.test(p))s++;if(/[^A-Za-z0-9]/.test(p))s++;const m=$('#mt');m.style.width=s*20+'%';m.style.background=s<3?'#e5091b':s<4?'#f5a524':'#22c55e';$('#mh').textContent=['Too short','Weak','Weak','Okay','Strong','Excellent'][s]};
+$('#cp2').onclick=async()=>{const a=$('#np').value;if(a.length<8)return toast('Use at least 8 characters','e');if(a!==$('#np2').value)return toast('Passwords do not match','e');const{error}=await sb.auth.updateUser({password:a});error?toast(error.message,'e'):(toast('Password updated','o'),$('#np').value=$('#np2').value='')}};
+boot();
+})();
+</script>
+</body>
+</html>
